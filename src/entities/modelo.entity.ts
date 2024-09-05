@@ -8,7 +8,7 @@ export class Modelo {
     @PrimaryGeneratedColumn('increment')
     id:number;
 
-    @ManyToOne(() => Marca, marca => marca.modelos, {cascade: ["insert"]})
+    @ManyToOne(() => Marca, marca => marca.modelos, {cascade:true})
     @JoinColumn()
     marca: Marca
 
@@ -21,4 +21,15 @@ export class Modelo {
     @OneToMany(() => Producto, productos => productos.modelo)
     productos: Producto[]
 
+
+    constructor(
+        marca: Marca,
+        nombre: string,
+        variante: string
+    ) {
+        this.marca = marca;
+        this.nombre = nombre;
+        this.variante = variante;
+    }
+    
 }

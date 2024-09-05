@@ -17,4 +17,15 @@ export class Cliente{
     
     @OneToOne(() => Pedido, (pedido) => pedido.cliente)
     pedido: Pedido
+
+
+    constructor(
+        nombre:string,
+        dni:string,
+        telefono:string
+    ){
+        this.nombre = nombre;
+        this.dni = dni;
+        this.telefono = telefono;
+    }
 }

@@ -12,4 +12,10 @@ export class Marca {
     @OneToMany(() => Modelo, (modelos) => modelos.marca)
     modelos:Modelo[]
 
+
+    constructor(
+        nombre: string
+    ) {
+        this.nombre = nombre;
+    }
 }

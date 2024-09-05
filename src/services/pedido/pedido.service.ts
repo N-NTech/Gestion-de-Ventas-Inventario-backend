@@ -30,8 +30,13 @@ export class PedidoService {
     }
 
     public async crearPedido(pedido:PedidoDTO): Promise<PedidoDTO>{
+
+        const pedidoExistente: PedidoDTO | null = await this.pedidoRepository.findOne({where:{
+                                                                                        
+                                                                                    }})
+
         const newPedido : PedidoDTO = await this.pedidoRepository.save(pedido)
-    
+        
         return newPedido
     }
 

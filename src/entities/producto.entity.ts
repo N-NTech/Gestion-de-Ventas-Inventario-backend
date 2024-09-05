@@ -12,7 +12,7 @@ export class Producto {
     @Column({type:'enum', enum:CategoriaEnum})
     categoria: CategoriaEnum
     
-    @ManyToOne(() => Modelo, (modelo) => modelo.productos, {cascade: ["insert"]})
+    @ManyToOne(() => Modelo, (modelo) => modelo.productos, {cascade: true})
     @JoinColumn()
     modelo:Modelo
 
@@ -27,5 +27,21 @@ export class Producto {
 
     @OneToMany(() => Pedido, (pedidos) => pedidos.producto)
     pedidos: Pedido[]
+
+
+
+    constructor(
+        categoria: CategoriaEnum,
+        modelo: Modelo,
+        talle: number,
+        color: string,
+        stock: number
+    ) {
+        this.categoria = categoria;
+        this.modelo = modelo;
+        this.talle = talle;
+        this.color = color;
+        this.stock = stock;
+    }
 
 }

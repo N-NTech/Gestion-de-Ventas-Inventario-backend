@@ -11,7 +11,7 @@ export class Pedido {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @OneToOne(() => Cliente, (cliente) => cliente.pedido,{cascade: ["insert"]})
+    @OneToOne(() => Cliente, (cliente) => cliente.pedido,{cascade: true})
     @JoinColumn()
     cliente: Cliente;
 
@@ -27,7 +27,7 @@ export class Pedido {
     @Column({type: 'enum', enum:EstadoEnum})
     estado: EstadoEnum
 
-    @ManyToOne(() => Producto, producto => producto.pedidos, {cascade: ["insert"]})
+    @ManyToOne(() => Producto, producto => producto.pedidos, {cascade: true})
     @JoinColumn()
     producto: Producto
 
@@ -42,5 +42,30 @@ export class Pedido {
 
     @Column()
     direccion: String;
+
+
+
+    constructor(
+        cliente: Cliente,
+        fechaDespacho: Date,
+        metodoDePago: MetodoDePagoEnum,
+        estado: EstadoEnum,
+        producto: Producto,
+        precioVenta: number,
+        precioCosto: number,
+        isEnvio: boolean,
+        direccion: string
+    ) {
+        this.cliente = cliente;
+        this.fechaDespacho = fechaDespacho;
+        this.metodoDePago = metodoDePago;
+        this.estado = estado;
+        this.producto = producto;
+        this.precioVenta = precioVenta;
+        this.precioCosto = precioCosto;
+        this.isEnvio = isEnvio;
+        this.direccion = direccion;
+    }
+
 
 }
