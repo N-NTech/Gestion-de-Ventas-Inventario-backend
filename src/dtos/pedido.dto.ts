@@ -25,7 +25,7 @@ export class PedidoDTO {
 
     @Type(() => ProductoDTO)
     @ValidateNested()
-    producto: ProductoDTO
+    productos: ProductoDTO[]
 
     precioVenta: number;
 

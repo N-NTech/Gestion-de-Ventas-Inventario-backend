@@ -1,5 +1,5 @@
 import { CategoriaEnum } from "src/enums/categoriaEnum.enum";
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Modelo } from "./modelo.entity";
 import { Pedido } from "./pedido.entity";
 
@@ -25,7 +25,7 @@ export class Producto {
     @Column()
     stock: number;
 
-    @OneToMany(() => Pedido, (pedidos) => pedidos.producto)
+    @ManyToMany(() => Pedido, (pedidos) => pedidos.productos)
     pedidos: Pedido[]
 
 

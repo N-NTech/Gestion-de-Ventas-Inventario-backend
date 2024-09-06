@@ -13,14 +13,14 @@ export class PedidoService {
 
     public async obtenerPedidos(): Promise<Pedido[]>{
         
-        const pedidos: Pedido[] = await this.pedidoRepository.find({relations:['producto','cliente']})
+        const pedidos: Pedido[] = await this.pedidoRepository.find({relations:['productos','cliente']})
 
         return pedidos
     }
 
     public async obtenerPedido(idPedido:number): Promise<Pedido>{
 
-        const pedido:Pedido = await this.pedidoRepository.findOne({where: {id:idPedido}, relations:['producto','cliente']})
+        const pedido:Pedido = await this.pedidoRepository.findOne({where: {id:idPedido}, relations:['productos','cliente']})
 
         if(!pedido){
             throw new NotFoundException('Pedido no encontrado')
@@ -30,10 +30,6 @@ export class PedidoService {
     }
 
     public async crearPedido(pedido:PedidoDTO): Promise<PedidoDTO>{
-
-        const pedidoExistente: PedidoDTO | null = await this.pedidoRepository.findOne({where:{
-                                                                                        
-                                                                                    }})
 
         const newPedido : PedidoDTO = await this.pedidoRepository.save(pedido)
         

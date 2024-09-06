@@ -28,6 +28,12 @@ export class MarcaService {
 
 
     async crearMarca(marca:MarcaDTO):Promise<MarcaDTO>{
+        const marcaExistente: MarcaDTO | null = await this.marcaRepository.findOneBy({nombre:marca.nombre})
+
+        if(marcaExistente){
+            throw new BadRequestException(`La marca ${marca.nombre} ya esta registrada`)
+        }
+
         const nuevaMarca = await this.marcaRepository.save(marca)
         
         return nuevaMarca

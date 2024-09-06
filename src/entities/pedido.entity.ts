@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Cliente } from "./cliente.entity";
 import { Producto } from "./producto.entity";
 import { MetodoDePagoEnum } from "src/enums/metodoPagoEnum.enum";
@@ -27,9 +27,9 @@ export class Pedido {
     @Column({type: 'enum', enum:EstadoEnum})
     estado: EstadoEnum
 
-    @ManyToOne(() => Producto, producto => producto.pedidos, {cascade: true})
-    @JoinColumn()
-    producto: Producto
+    @ManyToMany(() => Producto, producto => producto.pedidos, {cascade: true})
+    @JoinTable()
+    productos: Producto[]
 
     @Column()
     precioVenta: number;
@@ -50,7 +50,7 @@ export class Pedido {
         fechaDespacho: Date,
         metodoDePago: MetodoDePagoEnum,
         estado: EstadoEnum,
-        producto: Producto,
+        productos: Producto[],
         precioVenta: number,
         precioCosto: number,
         isEnvio: boolean,
@@ -60,7 +60,7 @@ export class Pedido {
         this.fechaDespacho = fechaDespacho;
         this.metodoDePago = metodoDePago;
         this.estado = estado;
-        this.producto = producto;
+        this.productos = productos;
         this.precioVenta = precioVenta;
         this.precioCosto = precioCosto;
         this.isEnvio = isEnvio;
