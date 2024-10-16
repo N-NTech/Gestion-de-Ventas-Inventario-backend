@@ -13,14 +13,14 @@ export class PedidoService {
 
     public async obtenerPedidos(): Promise<Pedido[]>{
         
-        const pedidos: Pedido[] = await this.pedidoRepository.find({relations:['productos','cliente']})
+        const pedidos: Pedido[] = await this.pedidoRepository.find({relations:['cliente','productos','productos.modelo', 'productos.modelo.marca']})
 
         return pedidos
     }
 
     public async obtenerPedido(idPedido:number): Promise<Pedido>{
 
-        const pedido:Pedido = await this.pedidoRepository.findOne({where: {id:idPedido}, relations:['productos','cliente']})
+        const pedido:Pedido = await this.pedidoRepository.findOne({where: {id:idPedido}, relations:['cliente','productos','productos.modelo', 'productos.modelo.marca']})
 
         if(!pedido){
             throw new NotFoundException('Pedido no encontrado')
