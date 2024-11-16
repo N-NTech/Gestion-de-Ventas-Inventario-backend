@@ -9,6 +9,7 @@ export const dbConfig = {
     username: process.env.DB_USERNAME as any,
     password: process.env.DB_PASSWORD as any,
     database: process.env.DB_NAME as any,
+    schema: process.env.DB_SCHEMA as any,
     autoLoadEntities: true,
     dropSchema: false,
     synchronize: true,
