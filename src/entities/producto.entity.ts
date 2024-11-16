@@ -20,9 +20,6 @@ export class Producto {
     talle: number
 
     @Column()
-    color: String
-
-    @Column()
     stock: number;
 
     @ManyToMany(() => Pedido, (pedidos) => pedidos.productos)
@@ -34,13 +31,11 @@ export class Producto {
         categoria: CategoriaEnum,
         modelo: Modelo,
         talle: number,
-        color: string,
         stock: number
     ) {
         this.categoria = categoria;
         this.modelo = modelo;
         this.talle = talle;
-        this.color = color;
         this.stock = stock;
     }
 

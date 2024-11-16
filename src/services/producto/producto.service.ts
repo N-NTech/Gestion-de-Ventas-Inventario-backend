@@ -32,7 +32,6 @@ export class ProductoService {
                                                                                              categoria:producto.categoria,
                                                                                              modelo:producto.modelo,
                                                                                              talle:producto.talle,
-                                                                                             color:producto.color,
                                                                                              stock:producto.stock, //por si hay un stock diferente para que no lo cree igual
                                                                                             }})
         if(productoExistente){

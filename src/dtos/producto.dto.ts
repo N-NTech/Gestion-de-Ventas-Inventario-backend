@@ -15,8 +15,6 @@ export class ProductoDTO {
 
     talle: number
 
-    color: String
-
     stock: number;
 
 
