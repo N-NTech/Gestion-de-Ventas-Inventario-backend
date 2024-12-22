@@ -1,13 +1,18 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { stringify } from 'querystring';
 import { PedidoDTO } from 'src/dtos/pedido.dto';
 import { Pedido } from 'src/entities/pedido.entity';
+import { Producto } from 'src/entities/producto.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class PedidoService {
 
-    constructor(@InjectRepository(Pedido) private readonly pedidoRepository:Repository<Pedido>){}
+    constructor(
+        @InjectRepository(Pedido) private readonly pedidoRepository:Repository<Pedido>,
+        @InjectRepository(Producto) private readonly productoRepository:Repository<Producto>
+    ){}
 
 
 
@@ -29,24 +34,42 @@ export class PedidoService {
         return pedido        
     }
 
-    public async crearPedido(pedido:PedidoDTO): Promise<PedidoDTO>{
-
-        const newPedido : PedidoDTO = await this.pedidoRepository.save(pedido)
+    public async crearPedido(pedido: PedidoDTO): Promise<PedidoDTO> {
+        let newPedido: PedidoDTO;
         
-        return newPedido
+        Logger.log('Creando pedido: ' + JSON.stringify(pedido));
+    
+        try {
+            for (const producto of pedido.productos) { // No usar el .foreach porque no se puede usar async/await
+                Logger.log('Buscando producto: ' + producto.id);
+                try {
+                    await this.productoRepository.findOneOrFail({ where: { id: producto.id } });
+                    Logger.log('Producto encontrado: ' + producto.id);
+                } catch (error) {
+                    Logger.error('Error al buscar producto con id ' + producto.id + ': ' + error.message);
+                    throw new BadRequestException(`Producto con id ${producto.id} no encontrado.`);
+                }
+            }
+    
+            newPedido = await this.pedidoRepository.save(pedido);
+            Logger.log('Pedido creado con éxito: ' + JSON.stringify(newPedido));
+    
+        } catch (error) {
+            Logger.error('Error al crear el pedido: ' + error.message);
+            throw new BadRequestException('Error al crear el pedido', error.message);
+        }
+        
+        return newPedido;
     }
 
 
-    public async crearPedidos(listPedidos:PedidoDTO[]): Promise<PedidoDTO[]>{
-        const pedidos: PedidoDTO[]= [];
-        
-        listPedidos.forEach(pedido=> {
-            this.pedidoRepository.save(pedido)
-            pedidos.push(pedido)
-        })
-        
-        return pedidos
-        
+    public async crearPedidos(listPedidos: PedidoDTO[]): Promise<PedidoDTO[]> {
+
+        const pedidosPersistidos = await this.pedidoRepository.save(listPedidos);
+
+        Logger.warn('Pedidos creados: '+JSON.stringify(pedidosPersistidos))
+
+        return pedidosPersistidos;
     }
 
 

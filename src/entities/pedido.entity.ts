@@ -27,7 +27,7 @@ export class Pedido {
     @Column({type: 'enum', enum:EstadoEnum})
     estado: EstadoEnum
 
-    @ManyToMany(() => Producto, producto => producto.pedidos, {cascade: true})
+    @ManyToMany(() => Producto, producto => producto.pedidos)
     @JoinTable({name: 'pedido_producto'})
     productos: Producto[]
 
