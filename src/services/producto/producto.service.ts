@@ -1,17 +1,43 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ModeloDTO } from 'src/dtos/modelo.dto';
 import { ProductoDTO } from 'src/dtos/producto.dto';
+import { Modelo } from 'src/entities/modelo.entity';
 import { Producto } from 'src/entities/producto.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductoService {
 
-    constructor(@InjectRepository(Producto) private readonly productoRepository:Repository<Producto>){}
+    constructor(
+        @InjectRepository(Producto) private readonly productoRepository:Repository<Producto>,
+        @InjectRepository(Modelo) private readonly modeloRepository:Repository<Modelo>
+    ){}
 
 
     async obtenerProductos(): Promise <ProductoDTO[]>{
         const productos: ProductoDTO[] = await this.productoRepository.find({relations:['modelo']}) 
+        return productos
+    }
+
+    async obtenerProductosByModelo(idModel: number): Promise<ProductoDTO[]> {
+
+        let modeloExistente: ModeloDTO;
+        let productos: ProductoDTO[] = []
+
+        try {
+            modeloExistente = await this.modeloRepository.findOneByOrFail({id: idModel})
+        } catch (error) {
+            Logger.error('Error al buscar modelo con id ' + idModel + ': ' + error.message);
+            throw new BadRequestException(`Modelo con id ${idModel} no encontrado.`)
+        }
+       
+        try {
+            productos = await this.productoRepository.find({where: {modelo:modeloExistente} ,relations:['modelo']})
+        } catch (error) {
+            Logger.error('Error al buscar productos con modelo ' + modeloExistente + ': ' + error.message);
+            throw new BadRequestException(`Productos con modelo ${modeloExistente} no encontrados.`)
+        }
         return productos
     }
 

@@ -12,6 +12,11 @@ export class ProductoController {
         return this.productoService.obtenerProductos()
     }
 
+    @Get('/modelo/:idModel')
+    obtenerProductosByModelo(@Param('idModel') idModel:number): Promise<ProductoDTO[]>{
+        return this.productoService.obtenerProductosByModelo(idModel)
+    }
+
     @Get(':id')
     obtenerProducto(@Param('id') id:number): Promise<ProductoDTO>{
         return this.obtenerProducto(id)
