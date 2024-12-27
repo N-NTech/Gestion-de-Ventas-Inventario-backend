@@ -21,6 +21,15 @@ export class Modelo {
     @OneToMany(() => Producto, productos => productos.modelo)
     productos: Producto[]
 
+    @Column({nullable:true})
+    imagen: String
+
+    @Column({nullable:true})
+    precioVenta: number
+
+    @Column({nullable:true})
+    precioCosto: number
+
 
     constructor(
         marca: Marca,

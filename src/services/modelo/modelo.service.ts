@@ -10,7 +10,7 @@ export class ModeloService {
     constructor(@InjectRepository(Modelo) private readonly modeloRepository:Repository<Modelo>){}
 
     async obtenerModelos():Promise<ModeloDTO[]>{
-        const modelos: ModeloDTO[] = await this.modeloRepository.find({relations:['marca']})
+        const modelos: ModeloDTO[] = await this.modeloRepository.find({relations:['marca','productos']})
         
         return modelos
     }

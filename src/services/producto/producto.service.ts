@@ -16,7 +16,7 @@ export class ProductoService {
 
 
     async obtenerProductos(): Promise <ProductoDTO[]>{
-        const productos: ProductoDTO[] = await this.productoRepository.find({relations:['modelo']}) 
+        const productos: ProductoDTO[] = await this.productoRepository.find({relations:['modelo', 'modelo.marca']}) 
         return productos
     }
 
